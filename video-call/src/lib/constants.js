@@ -1,0 +1,1 @@
+export const WEBSOCKET_ADDRESS = "ws://localhost:3000";

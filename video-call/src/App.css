@@ -1,0 +1,272 @@
+html, body {
+  padding: 0;
+  margin: 0;
+  background: #222;
+}
+
+.show {
+  display: block;
+}
+
+.hide {
+  display: none;
+}
+
+#remote {
+  position: absolute;
+  background: #222;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0;
+  object-fit: contain;
+}
+
+#local {
+  position: absolute;
+  max-width: 30%;
+  height: 30%;
+  margin: 15px;
+  opacity: 0;
+  z-index: 2;
+}
+
+.container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  color: #fff;
+  z-index: 5;
+  display: inline-flex;
+}
+
+.controls {
+  position: absolute;
+  width: 100%;
+  z-index: 6;
+  display: inline-flex;
+  bottom: 10%;
+}
+
+.controls>div>button {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+.controls>div>button.paused>svg {
+  fill: #ea5000 !important
+}
+
+.controls>div>button.muted>svg {
+  fill: #ea5000 !important
+}
+
+.controls>div {
+  margin: 0 auto;
+}
+
+.ctns-ctn {
+  margin: 0 auto;
+}
+
+.ctns-ctn>button, div {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.ctns-ctn>button {
+  margin-left: 20px;
+}
+
+.back {
+  margin-right: 20px;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.state>.icon {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -o-box-flex: 1;
+  box-flex: 1;
+  -webkit-flex: 0 0 auto;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  border-radius: 100%;
+}
+
+.state {
+  position: fixed;
+  z-index: 10;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: box;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  -o-box-orient: horizontal;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -moz-box-pack: center;
+  -o-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  -o-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  border-radius: 25px;
+  background-color: #0d6dfd9f;
+}
+
+.state>.icon {
+  margin: 6px;
+  margin-right: 0;
+  height: 16px;
+  width: 16px;
+}
+
+.state>.text {
+  -webkit-box-flex: 100;
+  -moz-box-flex: 100;
+  -o-box-flex: 100;
+  box-flex: 100;
+  -webkit-flex: 100 0 auto;
+  -ms-flex: 100 0 auto;
+  flex: 100 0 auto;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  pointer-events: none;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
+}
+
+.room-link-wrapper {
+  pointer-events: none;
+  position: absolute;
+  z-index: 1;
+  top: 80px;
+  right: 20px;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: box;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  -o-box-orient: horizontal;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: center;
+  -moz-box-pack: center;
+  -o-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+}
+
+.room-link {
+  width: auto;
+  background-color: #0d6dfdc2;
+  border-radius: 6px;
+  -webkit-box-shadow: 0px 3px 12px 2px rgb(17 17 17 / 40%);
+  box-shadow: 0px 3px 12px 2px rgb(17 17 17 / 40%);
+}
+
+.room-link>a.link {
+  display: block;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  pointer-events: auto;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+  text-decoration: none;
+  -webkit-transition-property: color;
+  -moz-transition-property: color;
+  -o-transition-property: color;
+  -ms-transition-property: color;
+  transition-property: color;
+  -webkit-transition-duration: 0.1s;
+  -moz-transition-duration: 0.1s;
+  -o-transition-duration: 0.1s;
+  -ms-transition-duration: 0.1s;
+  transition-duration: 0.1s;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.0;
+  }
+}
+
+@-webkit-keyframes blink {
+  50% {
+    opacity: 0.0;
+  }
+}
+
+.state>.icon.connected {
+  background-color: rgba(48, 189, 24, 0.75);
+}
+
+.state>.icon.connecting {
+  background-color: rgba(255, 174, 0, 0.75);
+  animation: blink 1s step-start 0s infinite;
+  -webkit-animation: blink 1s step-start 0s infinite;
+}
+
+.stgs-ctn {
+  padding-bottom: 20px;
+}
+
+.stgs-ctn label {
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.stgs-ctn label svg {
+  margin-right: 10px;
+  fill: #0d6efd;
+}
+
+.modal.show .modal-dialog {
+  display: block;
+}
+
+@media (min-device-width: 721px) {
+  .state {
+    top: 20px;
+    right: 20px;
+    width: 124px;
+  }
+  .state>.text {
+    font-size: 12px;
+  }
+  .room-link>a.link {
+    padding: 10px 20px;
+    font-size: 12px;
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "video_call_backend",
+  "version": "1.0.0",
+  "description": "video-call backend",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "pauzha",
+  "license": "MIT",
+  "dependencies": {
+    "mediasoup": "^3.8.0",
+    "nanoid": "^3.1.23",
+    "shelljs": "^0.8.4",
+    "uuid": "^8.3.2",
+    "ws": "^8.0.0"
+  }
+}
