@@ -11,7 +11,7 @@
 | PORT  | Protocol  | Description  |
 | ------------ | ------------ | ------------ |
 | 80  | TCP | HTTP web server   |
-| 443  | TCP | HTTP web server   |
+| 443  | TCP | HTTPS web server   |
 | 4000  | TCP | websocket port (only for development)  |
 | 50000-59999  | TCP & UDP  | RTC port range |
 
