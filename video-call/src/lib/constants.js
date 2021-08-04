@@ -1,1 +1,1 @@
-export const WEBSOCKET_ADDRESS = "ws://localhost:3000";
+export const WEBSOCKET_ADDRESS = "ws://192.168.29.13:4000";

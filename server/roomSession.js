@@ -6,7 +6,7 @@ module.exports = class roomSession {
         // session uniq id
         this.sessionId = uuidv1();
         // short room id
-        this.shortCode = 
+        this.roomCode = undefined
         // session router Process Id
         this.process = undefined;
         // session router

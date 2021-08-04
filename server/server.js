@@ -5,25 +5,74 @@ const GStreamer = require('./gstreamer');
 const { getPort, releasePort } = require('./port');
 const { initializeWorkers, createRouter, createTransport } = require('./worker');
 const config = require('./config');
-const https = require('http');
+const http = require('http');
+const https = require('https');
 const { v1: uuidv1 } = require('uuid');
 const roomSession = require('./roomSession');
 const Peer = require('./peer');
 const { nanoid } = require('nanoid');
+const express = require('express');
+const cors = require('cors');
+
+const appApi = express();
+appApi.use(cors())
+appApi.use(express.json());
+appApi.use(express.urlencoded({ extended: true }));
 
 const RECORDER_PROCESS_NAME = process.env.PROCESS_NAME || 'FFmpeg';
-const SERVER_PORT = process.env.SERVER_PORT || 3000;
+const SERVER_PORT = process.env.SERVER_PORT || 4000;
+const WEBAPP_URL = process.env.WEBAPP || 'http://localhost:5000'
+const PROTOCOL = process.env.PROTOCOL || 'http'
 
+// API and websocket server
+let appServer;
 
-const httpsServer = https.createServer();
-const wss = new WebSocket.Server({ server: httpsServer });
+if (PROTOCOL.toLowerCase() === "https") {
+    const HTTPS_OPTIONS = Object.freeze({
+        cert: fs.readFileSync(process.env.HTTPS_CERT_FULLCHAIN || `${__dirname}/certs/fullchain.pem`),
+        key: fs.readFileSync(process.env.HTTPS_CERT_PRIVKEY || `${__dirname}/certs/privkey.pem`)
+    });
+    appServer = https.createServer(HTTPS_OPTIONS, appApi);
+} else {
+    appServer = http.createServer(appApi);
+}
 
+const wss = new WebSocket.Server({ server: appServer });
 
 // All active call session
 const vcSessions = new Map();
 
 // Room code
 const rooms = new Map();
+
+// Room api routes
+// create room
+appApi.get('/create', async (req, res) => {
+    
+    const room = new roomSession();
+
+    room.router = await createRouter();
+    
+    const roomCode = nanoid(6);
+    room.roomCode = roomCode
+    
+    vcSessions.set(room.sessionId, room)
+    rooms.set(roomCode, room.sessionId)
+
+    // check and close session if room is empty after 5 mins
+    setTimeout(() => {
+        HandleEmptyRoom(room)    
+    }, 60000* 5)
+
+    console.log("Room::API room created, code : %s", roomCode)
+
+    return res.status(200).json({
+        code: roomCode,
+        url: `${WEBAPP_URL}/?roomId=${roomCode}`,
+        expire: Math.round((Date.now() + 60000*5) / 1000)
+    });
+});
+
 
 /**
  * Route request to their functions
@@ -103,7 +152,7 @@ const createRoom = async (jsonMessage, socket) => {
 
     // send room code to creator
     const roomCode = nanoid(6);
-
+    room.roomCode = roomCode
     rooms.set(roomCode, room.sessionId)
 
     const routerCapabilities = {
@@ -114,6 +163,11 @@ const createRoom = async (jsonMessage, socket) => {
         peerId: peer.peerId,
         roomCode: roomCode
     };
+
+    // close session if room is empty after 5 mins
+    setTimeout(() => {
+        HandleEmptyRoom(room)
+    }, 60000* 5)
 
     return routerCapabilities;
 }
@@ -181,11 +235,6 @@ const HandleLeaveRoom = (sessionId, peerId) => {
 
     peer.socket.peerId = undefined
     peer.socket.sessionId = undefined
-
-    if (room.peers.length === 0) {
-        closeRoom(room)
-        return
-    }
 
     room.peers.forEach(_peer => {
         if (_peer.peerId === peer.peerId) {
@@ -561,6 +610,24 @@ const stopRecording = (peer) => {
 }
 
 /**
+ * Close empty room after few mins
+ * @param {*} room 
+ */
+const HandleEmptyRoom = (room) => {
+
+    if (room.peers.length === 0) {
+        closeRoom(room)
+    }
+
+    else {
+        const timeout = 60000* 5
+        setTimeout(() => {
+            HandleEmptyRoom(room)
+        }, timeout)
+    }
+}
+
+/**
  * Close room and clear transports, producers, consumers
  * 
  * @param {object} room 
@@ -587,6 +654,8 @@ const stopRecording = (peer) => {
 
     room.router.close();
 
+    rooms.delete(room.roomCode)
+    vcSessions.delete(room.sessionId)
 }
 
 // websocket
@@ -625,8 +694,8 @@ wss.on('connection', async (socket, request) => {
 
         await initializeWorkers();
 
-        httpsServer.listen(SERVER_PORT, () =>
-            console.log('Socket Server listening on port %d', SERVER_PORT)
+        appServer.listen(SERVER_PORT, () =>
+            console.log('API and socket Server listening on port %d', SERVER_PORT)
         );
         
     } catch (error) {
