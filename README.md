@@ -3,7 +3,7 @@
 ### Configure files
 
 - Change websocket address in video-call/src/lib/constants.js to your server public IP address
-- To start apps HTTPS set PROTOCOL="HTTPS" as env variable, also make sure to add certificates (fullchain.pem, privkey.pem) to server/certs and video-call/certs. 
+- To use HTTPS set PROTOCOL="HTTPS" as env variable, also make sure to add certificates (fullchain.pem, privkey.pem) to server/certs and video-call/certs. 
 
 
 ### Ports required
