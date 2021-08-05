@@ -47,7 +47,7 @@ const rooms = new Map();
 
 // Room api routes
 // create room
-appApi.get('/create', async (req, res) => {
+appApi.get('/api/create', async (req, res) => {
     
     const room = new roomSession();
 

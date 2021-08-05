@@ -62,6 +62,17 @@ cd server && node server
 # Change PUBLIC_ADDR to server external ip or domain name
 PROCESS_NAME="GStreamer" PROTOCOL="HTTP" PUBLIC_ADDR="localhost" node server
 ```
+### Build and start the application
+
+```bash
+cd video-call
+
+# Build react
+npm run build
+
+# default server port is 5000
+PROTOCOL="HTTP" SERVER_PORT="80" node server
+```
 
 ### Docker
 
@@ -74,14 +85,18 @@ sudo docker build video-call/recorder .
 sudo docker run -d --net=host -e PROTOCOL="HTTP" -e PUBLIC_ADDR="localhost" video-call/recorder
 ```
 
-### Build and start the application
+## REST API
 
-```bash
-cd video-call
+`GET \api\create`
 
-# Build react
-npm run build
+### Request
 
-# default server port is 5000
-PROTOCOL="HTTP" SERVER_PORT="80" node server
-```
+    curl -i -H 'Accept: application/json' http://server_addr:port/api/create
+
+### Response
+
+    {
+        "code": "wd24f13",
+        "expire": 1628148509,
+        "url": "http://webapp:port/?roomId=wd24f13"
+    }
