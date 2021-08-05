@@ -43,7 +43,7 @@ module.exports = class roomSession {
         this.peers.forEach(peer => {
             const producer = peer.getProducer(id)
             if (!producer) {
-                continue
+                return
             } else {
                 return producer
             }

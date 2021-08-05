@@ -1,5 +1,7 @@
 const os = require('os');
 
+const PUBLIC_ADDR = process.env.PUBLIC_ADDR || 'localhost';
+
 module.exports = Object.freeze({
     numWorkers: Object.keys(os.cpus()).length,
     worker: {
@@ -69,7 +71,7 @@ module.exports = Object.freeze({
         ]
     },
     webRtcTransport: {
-        listenIps                       : [{ ip: '0.0.0.0', announcedIp: '111.111.111.11' }], // TODO: Change announcedIp to your external IP or domain name
+        listenIps                       : [{ ip: '0.0.0.0', announcedIp: PUBLIC_ADDR }], 
         enableUdp                       : true,
         enableTcp                       : true,
         preferUdp                       : true,
@@ -79,7 +81,7 @@ module.exports = Object.freeze({
     },
     
     plainRtpTransport: {
-        listenIp: { ip: '0.0.0.0', announcedIp: '111.111.111.11' }, // TODO: Change announcedIp to your external IP or domain name
+        listenIp: { ip: '0.0.0.0', announcedIp: PUBLIC_ADDR },
         rtcpMux: true,
         comedia: false
     }
