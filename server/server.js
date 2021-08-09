@@ -227,7 +227,16 @@ const leaveRoom = (jsonMessage) => {
 const HandleLeaveRoom = (sessionId, peerId) => {
 
     const room = vcSessions.get(sessionId);
-    const peer = room.getPeer(peerId)
+
+    if (!room) {
+        return
+    }
+
+    const peer = room.getPeer(peerId);
+
+    if (!peer) {
+        return;
+    }
 
     stopRecording(peer)
 
